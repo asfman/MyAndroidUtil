@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp" >
+
+    <com.asfman.widget.ClearEditText
+        android:id="@+id/widget_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/corner_search_edit"
+        android:drawableLeft="@drawable/search_icon"
+        android:drawablePadding="6dp"
+        android:hint="Hello EditText"
+        android:imeOptions="actionSearch"
+        android:padding="7dp"
+        android:singleLine="true" >
+
+    </com.asfman.widget.ClearEditText>
+
+</LinearLayout>

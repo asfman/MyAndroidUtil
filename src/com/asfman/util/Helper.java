@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,9 +32,12 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -345,11 +347,6 @@ public class Helper {
 			retString = df.format(businessDistance) + "公里";
 		}
 		return retString;
-	}
-
-	public static UUID getUUID(Context context) {
-		DeviceUuidFactory deviceUuidFactory = new DeviceUuidFactory(context);
-		return deviceUuidFactory.getDeviceUuid();
 	}
 
 	public static int getIntPref(Context context, String key) {
@@ -813,4 +810,25 @@ public class Helper {
 		intent.setData(Uri.parse("sinaweibo://splash"));
 		return isIntentAvailable(context, intent);
 	}
+	
+	public static String getMobileUUID(Context context) {
+		String uuid = "";
+		// 先获取mac
+		WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		/* 获取mac地址 */
+		if (wifi != null) {
+			WifiInfo info = wifi.getConnectionInfo();
+			if (info != null && info.getMacAddress() != null) {
+				uuid = info.getMacAddress().replace(":", "");
+			}
+		}
+		// 再加上imei
+		TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId();
+		uuid = uuid + imei;
+		if (uuid != null && uuid.length() > 64) {
+			uuid = uuid.substring(0, 64);
+		}
+		return uuid;
+	}	
 }
